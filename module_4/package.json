@@ -1,0 +1,19 @@
+{
+  "name": "json-to-xml",
+  "version": "1.0.0",
+  "description": "Writing the given sorted result into a target file in a XML format.",
+  "main": "json-to-xml.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+   "dependencies": {
+    "prompt": "0.2.14",
+    "xmlbuilder": "2.6.1"
+  },
+  "keywords": [
+    "json-to-xml",
+    "createXMLFile"
+  ],
+  "author": "nilesh_pharande",
+  "license": "MIT"
+}
