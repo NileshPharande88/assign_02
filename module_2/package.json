@@ -1,6 +1,6 @@
 {
   "name": "json-sort",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Extracting a sorted result from a given JSON object.",
   "main": "jsonSort.js",
   "scripts": {
