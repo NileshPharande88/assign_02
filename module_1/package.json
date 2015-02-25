@@ -1,0 +1,19 @@
+{
+  "name": "json-reader",
+  "version": "1.0.4",
+  "description": "Reading a specified JSON file and returning the JSON object.",
+  "main": "jsonReader.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "json-reader"
+  },
+  "keywords": [
+    "npm",
+    "module"
+  ],
+  "author": "nilesh_pharande",
+  "license": "MIT"
+}

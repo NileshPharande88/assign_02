@@ -1,0 +1,16 @@
+{
+  "name": "json-sort",
+  "version": "1.0.2",
+  "description": "Extracting a sorted result from a given JSON object.",
+  "main": "jsonSort.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "npm",
+    "json_sorting",
+    "module"
+  ],
+  "author": "nilesh_pharande",
+  "license": "MIT"
+}
