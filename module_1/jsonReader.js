@@ -2,20 +2,29 @@ function jsonObject(jsonFileName, callback) {
   try{
     //check for module is successfully installed and accessible or not.
     var fs = require("fs");
-    if ((fs === undefined)) throw new Error( " Can't access fs module" );
+    if ((fs === undefined)) {
+        return callback( new Error( " Can't access fs module" ), null);
+    }
 
     //check for the presence of source.json.
-    if(!fs.existsSync(jsonFileName)) throw new Error( " File is not present in current folder" );
+    if(!fs.existsSync(jsonFileName)) {
+        return callback( new Error( " File is not present in current folder" ), null);
+    }
     //checks for json file is readable or not.
     var sourceString = fs.readFileSync("source.json");
-    if ((sourceString === undefined)) throw new Error( " Can't read json file." );
+    if ((sourceString === undefined)) {
+        return callback( new Error( " Can't read json file." ), null);
+    }
     //checks for string json is parse or not.
     var sourceJSON = JSON.parse( sourceString );
-    if ((sourceJSON === undefined)) throw new Error( " Can't parse json string." );
-    else return callback(0,sourceJSON);
+    if ((sourceJSON === undefined)) {
+        return callback( new Error( " Can't parse json string." ), null);
+    } else {
+        return callback(null, sourceJSON);
+    }
     
   }catch(errorMessage){
-    return callback(1,errorMessage);
+    return callback( errorMessage, null);
   }
 }
   

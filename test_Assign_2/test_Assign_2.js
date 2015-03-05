@@ -10,10 +10,10 @@ if ((jsonToText === undefined)) throw new Error( " Can't access json-to-text mod
 if ((jsonToXML === undefined)) throw new Error( " Can't access json-to-xml module" );
 if ((async === undefined)) throw new Error( " Can't access async module" );
 
-jsonReader.jsonObject("source.json", function(err,object){
+jsonReader.jsonObject("source.json", function ( err,object ) {
 	if(err) console.log(object);
 	else {
-		jsonSort.sortJSON(object,function(err,sortedStudentArray){
+		jsonSort.sortJSON ( object, function (err,sortedStudentArray) {
 			if(err) console.log(err);
 			else {
 				async.series( [

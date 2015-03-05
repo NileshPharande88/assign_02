@@ -1,18 +1,28 @@
-var XMLFileCreator = function( xmlFileName, sortedStudentArray, cb ) {
+var XMLFileCreator = function( xmlFileName, sortedStudentArray, callback ) {
 	try{
-		if( xmlFileName === undefined ) throw new Error( " xmlFileName is not passed to the function." );
-		if( sortedStudentArray === undefined ) throw new Error( " sortedStudentArray is not passed to the function." );
-		else if (sortedStudentArray.length == 0) throw new Error( " sortedStudentArray not contain students in array." );
+		if( xmlFileName === undefined ) {
+			return callback( new Error(" xmlFileName is not passed to the function."), null);
+		}
+		if( sortedStudentArray === undefined ) {
+			return callback( new Error(" sortedStudentArray is not passed to the function."), null);
+		} else if (sortedStudentArray.length == 0) {
+			return callback( new Error(" sortedStudentArray not contain students in array."), null);
+		}
 		var fs = require("fs");
-		if ((fs === undefined)) throw new Error( " Can't access fs module" );
 		var prompt = require('prompt');
-		if ((prompt === undefined)) throw new Error( " Can't access prompt module" );
 		var builder = require("xmlbuilder");
-		if ((builder === undefined)) throw new Error( " Can't access builder module" );
-
+		if ((fs === undefined)) {
+			return callback( new Error(" Can't access fs module"), null);
+		}
+		if ((prompt === undefined)) {
+			return callback( new Error(" Can't access prompt module"), null);
+		}
+		if ((builder === undefined)) {
+			return callback( new Error(" Can't access builder module"), null);
+		}
 
 		//Create or modify destination.xml using "xmlbuilder" module from arrayElements.
-		var createOrOverwriteXMLFile = function(cb){
+		var createOrOverwriteXMLFile = function (callback) {
 	        var rootElement = builder.create( "Students" );
 	        //Getting Each element from an array and appending to xml file.
 	        sortedStudentArray.forEach( function(value) {
@@ -23,36 +33,48 @@ var XMLFileCreator = function( xmlFileName, sortedStudentArray, cb ) {
 	        var xmlString = rootElement.end( {pretty: true} );
 	        //console.log(xmlString);
 	        fs.writeFileSync( xmlFileName, xmlString );
-	        fs.exists(xmlFileName, function(exists){
-	            if (exists) return cb(null, "xml file is created or modified.");
-	            else return cb(1, "xml file is not created.");
+	        fs.exists(xmlFileName, function(exists) {
+	            if (exists) {
+	            	return callback( null, "xml file is created or modified.");
+	            } else {
+	            	return callback( new Error(" xml file is not created."), null);
+	            }
 	        });
 	    }
 
 		//check for the presence of xml File and perform specific task on the response.
-	    var destXMLFile = function(cb){
+	    var destXMLFile = function(callback) {
 	        if (fs.existsSync(xmlFileName))
 	        {
 	            console.log("XML file is already present...Do you want to overwrite???(y/n)");
 	            prompt.start();
 	            prompt.get(['xml_reply'], function (err, result) {
-	                if (err) { return onErr(err); }
-	                if (result.xml_reply == "y") { createOrOverwriteXMLFile(cb); }
-	                else if (result.xml_reply == "n") { return cb(null, "xml file will remain unchanged."); }
-	                else  { return cb(1, "Please Enter only y or n ...Currently xml file will remain unchanged."); }
+	                if (err) {
+	                	return onErr(err);
+	                }
+	                if (result.xml_reply == "y") {
+	                	createOrOverwriteXMLFile(callback);
+	                } else if (result.xml_reply == "n") {
+	                	return callback(null, "xml file will remain unchanged.");
+	                } else {
+	                	return callback( new Error(" Please Enter only y or n ...Currently xml file will remain unchanged."), null);
+	                }
 	            });
-	            function onErr(err) {
+	            function onErr(err) {  //returns a callback with errorMessage.
 	                console.log(err);
-	                return cb(1, "Failed to get reply from user for xml file");//returns a callback with errorMessage.
+	                return callback( new Error(" Failed to get reply from user for xml file"), null);
 	            }
 	        } else {
-	            createOrOverwriteXMLFile(cb);
+	            createOrOverwriteXMLFile(callback);
 	        }
 	    }//End of all code about XML File.
-	    destXMLFile(cb);
+
+
+	    destXMLFile(callback);
 
 	} catch(errorMessage) {
-		return cb(1, errorMessage );//returns a callback with error object as response
+		return callback(errorMessage, null);  //returns a callback with error object as response
 	}
 }
+
 module.exports.XMLFileCreator = XMLFileCreator;
