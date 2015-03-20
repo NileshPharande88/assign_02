@@ -1,75 +1,77 @@
-var TextFileCreator = function( textFileName, sortedStudentArray, callback ) {
-	try{
-		if( textFileName === undefined ) {
-			return callback( new Error(" textFileName is not passed to the function."), null);
-		}
-		if( sortedStudentArray === undefined ) {
-			return callback( new Error(" sortedStudentArray is not passed to the function."), null);
-		} else if (sortedStudentArray.length == 0) {
-			return callback( new Error(" sortedStudentArray not contain students in array."), null);
-		}
-		var fs = require("fs");
-		var prompt = require('prompt');
-		if ((fs === undefined)) {
-			return callback( new Error(" Can't access fs module"), null);
-		}
-		if ((prompt === undefined)) {
-			return callback( new Error(" Can't access prompt module"), null);
-		}
+var TextFileCreator = function ( textFileName, sortedStudentArray, callback ) {
+    try{
+        var fs = require("fs");
+        var prompt = require('prompt');
+        if (fs === undefined) {
+            return callback( new Error(" Can't access fs module"), null);
+        }
+        if (prompt === undefined) {
+            return callback( new Error(" Can't access prompt module"), null);
+        }
 
-		//Create Text File or modify if already present, from arrayElements.
-	    var createOrOverwriteTextFile = function(callback){
-	        fs.writeFileSync( textFileName, "First Name | Last Name | Score\n" );
-	        //Getting Each element from an array and appending to txt file.
-	        sortedStudentArray.forEach( function (value) {
-	            fs.appendFile( textFileName, value.id + " | " + value.fName + " | " + value.lName + " | " + value.score + "\n", function (err) {
-	                if( err ) {  //throwing an user defined error.
-	                	return callback( new Error(" Error in appending data"), null);
-	                }
-	            });
-	        });
-	        fs.exists(textFileName, function(exists){
-	            if (exists) {
-	            	return callback(null, "Text File is created or modified.");
-	            } else {
-	            	return callback( new Error(" Text file is not created."), null);
-	            }
-	        });
-	    }
-
-		//check for the presence of Text File and perform specific task on the response.
-	    var destTextFile = function(callback){
-	        if ( fs.existsSync(textFileName) )
-	        {
-	            console.log("text file is already present...Do you want to overwrite???(y/n)");
-	            prompt.start();
-	            prompt.get(['text_reply'], function (err, result) {
-	                if (err) {
-	                	return onErr(err);
-	                }
-	                if (result.text_reply == "y") {
-	                	createOrOverwriteTextFile(callback);
-	                } else if (result.text_reply == "n") {
-	                	return callback(null, "txt file will remain unchanged.");
-	                } else {
-	                	return callback( new Error(" Please Enter only y or n ...Currently txt file will remain unchanged."), null);
-	                }
-	            });
-	            function onErr(err) {
-	                console.log(err);
-	                return callback( new Error(" Failed to get reply from user for txt file"), null);//returns a callback with errorMessage.
-	            }
-	        } else {
-	            createOrOverwriteTextFile(callback);
-	        }
-	    }//End of all code about Text File.
+        if( textFileName === undefined ) {
+            return callback( new Error(" textFileName is not passed to the function."), null);
+        }
+        if( sortedStudentArray === undefined ) {
+            return callback( new Error(" sortedStudentArray is not passed to the function."), null);
+        } else if (sortedStudentArray.length == 0) {
+            return callback( new Error(" sortedStudentArray not contain students in array."), null);
+        }
 
 
+        //Create Text File or modify if already present, from arrayElements.  /////studentArray
+        var createOrOverwriteTextFile = function (cb) {
+            fs.writeFileSync( textFileName, "First Name | Last Name | Score\n" );
+            //Getting Each element from an array and appending to txt file.
+            var errorInwriting = false;
+            for (var x = 0; x < sortedStudentArray.length; x++) {
+                fs.appendFile( textFileName, sortedStudentArray[x].id + " | " + sortedStudentArray[x].fName + " | " + sortedStudentArray[x].lName + " | " + sortedStudentArray[x].score + "\n", function (err) {
+                    if (err) {
+                        errorInwriting = true;
+                    }
+                });
+                if (errorInwriting) {
+                    break;
+                }
+            }
+            if (errorInwriting) {
+                return cb(new Error(" Error in appending data."), null);
+            }
+            fs.exists("destination.txt",function(exists) {
+                if (exists) {
+                    return cb(null, "destination.txt is created or modified.");
+                }
+                return cb(new Error(" destination.txt is not created."), null);
+            });
+        }
 
-	    destTextFile(callback); //actual call to function for execution.
+        //check for the presence of Text File and perform specific task on the response.
+        var destTextFile = function (cb) {
+            if ( !fs.existsSync(textFileName) ) {
+                return createOrOverwriteTextFile(cb);
+            }
+            //File is exists already. So ask user before override it.
+            console.log("destination.txt is already present...Do you want to overwrite???(y/n)");
+            prompt.start();
+            prompt.get(['text_reply'], function (err, result) {
+                if (err) {
+                    console.log(err);
+                    return cb(new Error(" Failed to get reply from user for text file."), null);
+                }
+                if (result.text_reply == "y") {
+                    return createOrOverwriteTextFile(cb);
+                } else if (result.text_reply == "n") {
+                    return cb(null, "txt file will remain unchanged.");
+                }  //User not giving proper response so send an error.
+                return cb(new Error(" Please Enter only y or n ...Currently txt file will remain unchanged."), null);
+            });
+        }//End of all code about destination.txt.
 
-	} catch(errorMessage) {
-		return callback(errorMessage, null);//returns a callback with error object as response
-	}
+        destTextFile(callback); //actual call to function for execution.
+
+    } catch (errorMessage) {
+        return callback(errorMessage, null);//returns a callback with error object as response.
+    }
 }
+
 module.exports.TextFileCreator = TextFileCreator;

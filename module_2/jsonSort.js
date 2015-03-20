@@ -1,35 +1,40 @@
-function sortJSON(jsonObject, callback){
-	try{
-		//checks for json object is received or not.
-		if( jsonObject === undefined ) {
-			return callback( new Error(" jsonObject is not passed to the function."), null);
-		}
+function sortJSON ( jsonObject, callback ) {
+    try {
+        //checks for json object is received or not.
+        if ( jsonObject === undefined ) {
+            return callback( new Error(" jsonObject is not passed to the function."), null);
+        }
 
-		var students = jsonObject.students;
-		//checks for the students tag in the json object.
-		if(students === undefined) {
-			return callback( new Error(" jsonObject not contain students key."), null);
-		} else if (students.length == 0) {  //checks for the presence of students inan array of the students tag.
-			return callback( new Error(" jsonObject not contain students in array."), null);
-		}
+        var students = jsonObject.students;
+        if (students === undefined) {  //checks for the students tag in the json object.
+            return callback( new Error(" jsonObject not contain students key."), null);
+        } else if (students.length === 0) {  //checks for the presence of students inan array of the students tag.
+            return callback( new Error(" jsonObject not contain students in array."), null);
+        }
 
-		//checks for the presence of elements of each object.
-		students.forEach(function (value) {
-	    	if( (value.id === undefined) ) {
-	    		return callback( new Error(" id is not found in object"), null);
-	    	} else if( (value.fName === undefined) ) {
-	    		return callback( new Error(" fName is not found in object"), null);
-	    	} else if( (value.lName === undefined) ) {
-	    		return callback( new Error(" lName is not found in object"), null);
-	    	} else if( (value.score === undefined) ) {
-	    		return callback( new Error(" score is not found in object"), null);
-	    	}
-    	});
+        //checks for the presence of elements of each object.
+        for (var x = 0; x < students.length; x++) {
+            if( students[x].id === undefined ) {
+                return callback( new Error(" id not found in object"), null);
+            } else if( students[x].fName === undefined ) {
+                return callback( new Error(" First name not found in object"), null);
+            } else if( students[x].lName === undefined ) {
+                return callback( new Error(" Last name not found in object"), null);
+            } else if( students[x].score === undefined ) {
+                return callback( new Error(" score not found in object"), null);
+            }
+        }
 
-		//actual sorting of array elements
-		students.sort( function (a, b) {
-	        return b.score - a.score ;
-	    });
+        //actual sorting of array elements.
+        for ( var x = 0; x < students.length-1; x++) {
+            for ( var y = x+1; y < students.length; y++) {
+                if(students[x].score < students[y].score) {
+                    var tempScore = students[x].score;
+                    students[x].score = students[y].score;
+                    students[y].score = tempScore;
+                }
+            }
+        }
 	    //returning the sorted student array as a result.
 		return callback(null, students);
 

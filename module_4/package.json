@@ -1,6 +1,6 @@
 {
   "name": "json-to-xml",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Writing the given sorted result into a target file in a XML format.",
   "main": "json-to-xml.js",
   "scripts": {
