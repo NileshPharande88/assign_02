@@ -8,7 +8,6 @@ var TextFileCreator = function ( textFileName, sortedStudentArray, callback ) {
         if (prompt === undefined) {
             return callback( new Error(" Can't access prompt module"), null);
         }
-
         if( textFileName === undefined ) {
             return callback( new Error(" textFileName is not passed to the function."), null);
         }
@@ -25,7 +24,7 @@ var TextFileCreator = function ( textFileName, sortedStudentArray, callback ) {
             //Getting Each element from an array and appending to txt file.
             var errorInwriting = false;
             for (var x = 0; x < sortedStudentArray.length; x++) {
-                fs.appendFile( textFileName, sortedStudentArray[x].id + " | " + sortedStudentArray[x].fName + " | " + sortedStudentArray[x].lName + " | " + sortedStudentArray[x].score + "\n", function (err) {
+                fs.appendFile( textFileName, sortedStudentArray[x].id + " | " + sortedStudentArray[x].fName + " | " + sortedStudentArray[x].lName + " | " + sortedStudentArray[x].score + "\n", function afterAppendingTextFile(err) {
                     if (err) {
                         errorInwriting = true;
                     }
@@ -37,7 +36,7 @@ var TextFileCreator = function ( textFileName, sortedStudentArray, callback ) {
             if (errorInwriting) {
                 return cb(new Error(" Error in appending data."), null);
             }
-            fs.exists("destination.txt",function(exists) {
+            fs.exists("destination.txt",function isTextFileExists(exists) {
                 if (exists) {
                     return cb(null, "destination.txt is created or modified.");
                 }
@@ -53,7 +52,7 @@ var TextFileCreator = function ( textFileName, sortedStudentArray, callback ) {
             //File is exists already. So ask user before override it.
             console.log("destination.txt is already present...Do you want to overwrite???(y/n)");
             prompt.start();
-            prompt.get(['text_reply'], function (err, result) {
+            prompt.get(['text_reply'], function afterXMLPromptReply(err, result) {
                 if (err) {
                     console.log(err);
                     return cb(new Error(" Failed to get reply from user for text file."), null);

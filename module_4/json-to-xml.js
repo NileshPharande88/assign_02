@@ -33,7 +33,7 @@ var XMLFileCreator = function ( xmlFileName, sortedStudentArray, callback ) {
             }
             var xmlString = rootElement.end( {pretty: true} );
             fs.writeFileSync( xmlFileName, xmlString );
-            fs.exists(xmlFileName, function (exists) {
+            fs.exists(xmlFileName, function isXMLFileExists(exists) {
                 if (exists) {
                     return cb(null, "destination.xml is created or modified.");
                 }
@@ -50,7 +50,7 @@ var XMLFileCreator = function ( xmlFileName, sortedStudentArray, callback ) {
             //File is exists already. So ask user before override it.
             console.log("destination.xml is already present...Do you want to overwrite???(y/n)");
             prompt.start();
-            prompt.get(['xml_reply'], function (err, result) {
+            prompt.get(['xml_reply'], function afterTextPromptReply(err, result) {
                 if (err) {
                     console.log(err);
                     return callback(new Error(" Failed to get reply from user for xml file."), null);

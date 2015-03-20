@@ -23,19 +23,19 @@ try {
         throw new Error(" Can't access async module");
     }
 
-    jsonReader.jsonObject("source.json", function ( err,object ) {
+    jsonReader.jsonObject("source.json", function jsonReaderHandler( err,object ) {
         if (err) {
             console.log(err);
             throw new Error(" Error from json-reader module.");
         }
-        jsonSort.sortJSON ( object, function (err,sortedStudentArray) {
+        jsonSort.sortJSON ( object, function jsonSorterHandler(err,sortedStudentArray) {
             if (err) {
                 console.log(err);
                 throw new Error(" Error from json-sort module.");
             }
             async.series([
                 function (callback) {
-                    jsonToText.TextFileCreator("destination.txt", sortedStudentArray, function (err, res) {
+                    jsonToText.TextFileCreator("destination.txt", sortedStudentArray, function jsonToTextHandler(err, res) {
                         if (err) {
                             console.log(err);
                             return callback(null, 'one failed');
@@ -45,7 +45,7 @@ try {
                     });
                 },
                 function (callback) {
-                    jsonToXML.XMLFileCreator("destination.xml", sortedStudentArray, function (err, res) {
+                    jsonToXML.XMLFileCreator("destination.xml", sortedStudentArray, function jsonToXMLHandler(err, res) {
                     	if (err) {
                             console.log(err);
                             return callback(null, 'two failed');
@@ -54,7 +54,7 @@ try {
                         return callback(null, 'two success');
                     });
                 }
-            ], function (err, results) {
+            ], function asyncSeriesHandler(err, results) {
                 console.log("Final Result: " + results);
             });
         });

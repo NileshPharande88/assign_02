@@ -1,6 +1,6 @@
 {
   "name": "json-to-text",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Writing the given sorted result into a target file in a plain text format.",
   "main": "json-to-text.js",
   "scripts": {
