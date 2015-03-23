@@ -22,19 +22,8 @@ var TextFileCreator = function ( textFileName, sortedStudentArray, callback ) {
         var createOrOverwriteTextFile = function (cb) {
             fs.writeFileSync( textFileName, "First Name | Last Name | Score\n" );
             //Getting Each element from an array and appending to txt file.
-            var errorInwriting = false;
             for (var x = 0; x < sortedStudentArray.length; x++) {
-                fs.appendFile( textFileName, sortedStudentArray[x].id + " | " + sortedStudentArray[x].fName + " | " + sortedStudentArray[x].lName + " | " + sortedStudentArray[x].score + "\n", function afterAppendingTextFile(err) {
-                    if (err) {
-                        errorInwriting = true;
-                    }
-                });
-                if (errorInwriting) {
-                    break;
-                }
-            }
-            if (errorInwriting) {
-                return cb(new Error(" Error in appending data."), null);
+                fs.appendFileSync( textFileName, sortedStudentArray[x].id + " | " + sortedStudentArray[x].fName + " | " + sortedStudentArray[x].lName + " | " + sortedStudentArray[x].score + "\n");
             }
             fs.exists("destination.txt",function isTextFileExists(exists) {
                 if (exists) {

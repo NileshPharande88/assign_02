@@ -2,6 +2,7 @@ try {
     var jsonReader = require("json-reader");
     var jsonSort = require("json-sort");
     var async = require("async");
+    //var jsonToText = require("./../module_3/json-to-text.js");
     var jsonToText = require("json-to-text");
     var jsonToXML = require("json-to-xml");
 
@@ -28,7 +29,7 @@ try {
             console.log(err);
             throw new Error(" Error from json-reader module.");
         }
-        jsonSort.sortJSON ( object, function jsonSorterHandler(err,sortedStudentArray) {
+        jsonSort.sortJSON ( object, function jsonSorterHandler(err, sortedStudentArray) {
             if (err) {
                 console.log(err);
                 throw new Error(" Error from json-sort module.");
