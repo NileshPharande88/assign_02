@@ -29,9 +29,9 @@ function sortJSON ( jsonObject, callback ) {
         for ( var x = 0; x < students.length-1; x++) {
             for ( var y = x+1; y < students.length; y++) {
                 if(students[x].score < students[y].score) {
-                    var tempScore = students[x].score;
-                    students[x].score = students[y].score;
-                    students[y].score = tempScore;
+                    var tempStudent = students[x];
+                    students[x] = students[y];
+                    students[y] = tempStudent;
                 }
             }
         }
